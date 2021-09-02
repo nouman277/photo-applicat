@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     CardView btnUPLOAD,btnSELECT;
     ImageView viewP;
     private Uri filePath;
@@ -42,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseStorage storage;
     StorageReference storageReference;
+
+
+
 
 
     @Override
@@ -211,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
 
-                            
+
                             progressDialog.dismiss();
                             Toast
                                     .makeText(MainActivity.this,

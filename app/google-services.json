@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "10781229976",
-    "project_id": "photo-application-37386",
-    "storage_bucket": "photo-application-37386.appspot.com"
+    "project_number": "215740088514",
+    "project_id": "connecttoandroid-f2ffb",
+    "storage_bucket": "connecttoandroid-f2ffb.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:10781229976:android:28d104e4c2d8a60a1d61ed",
+        "mobilesdk_app_id": "1:215740088514:android:817525b9936507ff5b7b5b",
         "android_client_info": {
-          "package_name": "com.example.photoapplication"
+          "package_name": "com.example.anew"
         }
       },
       "oauth_client": [
         {
-          "client_id": "10781229976-q8b3c3n5b53mvf1is21q8hfcavjimldt.apps.googleusercontent.com",
+          "client_id": "215740088514-0bp89coaifucgt5tcls3orn5curalptp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB0giR8e1zzaNqO8Wy4swVxD2U4p0hkUys"
+          "current_key": "AIzaSyBjeGEFIRubL-4hO0hXVHlRyUewrIKuu5Y"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "10781229976-q8b3c3n5b53mvf1is21q8hfcavjimldt.apps.googleusercontent.com",
+              "client_id": "215740088514-0bp89coaifucgt5tcls3orn5curalptp.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
