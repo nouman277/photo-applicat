@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 22;
 
+
     FirebaseStorage storage;
     StorageReference storageReference;
 
@@ -82,36 +83,41 @@ public class MainActivity extends AppCompatActivity {
 
                 uploadImage();
 
-                AlertDialog.Builder builder
-                        = new AlertDialog
-                        .Builder(MainActivity.this);
-
-                builder.setMessage("Image should be uploaded to Firebase Storage");
-
-                // Set Alert Title
-                builder.setTitle("UPLOAD IMAGE");
-                builder.setCancelable(false);
 
 
-                builder
-                        .setNegativeButton(
-                                "View Image",
-                                new DialogInterface
-                                        .OnClickListener() {
+                    AlertDialog.Builder builder
+                            = new AlertDialog
+                            .Builder(MainActivity.this);
 
-                                    @Override
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        Intent intent = new Intent(MainActivity.this, imageView.class);
-                                        startActivity(intent);
+                    builder.setMessage("YOUR IMAGE IS UPLOADED TO FIRE STORE");
 
-                                    }
-                                });
+                    // Set Alert Title
+                    builder.setTitle("IMAGE UPLOADED");
+                    builder.setCancelable(false);
 
-                AlertDialog alertDialog = builder.create();
+
+
+                    builder
+                            .setNegativeButton(
+                                    "VIEW IMAGE",
+                                    new DialogInterface
+                                            .OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface dialog,
+                                                            int which)
+                                        {
+                                            Intent intent = new Intent(MainActivity.this,UloadView.class);
+                                            startActivity(intent);
+
+                                        }
+                                    });
+
+                    AlertDialog alertDialog = builder.create();
 
 
                 alertDialog.show();
+
 
 
             }
@@ -232,15 +238,22 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onProgress(
                                         UploadTask.TaskSnapshot taskSnapshot) {
-                                    double progress
+                                     double progress
                                             = (100.0
                                             * taskSnapshot.getBytesTransferred()
-                                            / taskSnapshot.getTotalByteCount());
+                                            / taskSnapshot.getTotalByteCount()
+
+
+                                    );
+
+
                                     progressDialog.setMessage(
                                             "Uploaded "
                                                     + (int) progress + "%");
                                 }
                             });
+
+
 
         }
 
