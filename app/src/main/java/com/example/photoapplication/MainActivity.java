@@ -85,38 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                    AlertDialog.Builder builder
-                            = new AlertDialog
-                            .Builder(MainActivity.this);
-
-                    builder.setMessage("YOUR IMAGE IS UPLOADED TO FIRE STORE");
-
-                    // Set Alert Title
-                    builder.setTitle("IMAGE UPLOADED");
-                    builder.setCancelable(false);
-
-
-
-                    builder
-                            .setNegativeButton(
-                                    "VIEW IMAGE",
-                                    new DialogInterface
-                                            .OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog,
-                                                            int which)
-                                        {
-                                            Intent intent = new Intent(MainActivity.this,UloadView.class);
-                                            startActivity(intent);
-
-                                        }
-                                    });
-
-                    AlertDialog alertDialog = builder.create();
-
-
-                alertDialog.show();
 
 
 
@@ -183,7 +151,57 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
+            private void dilogBox(){
+                AlertDialog.Builder builder
+                        = new AlertDialog
+                        .Builder(MainActivity.this);
+
+                builder.setMessage("YOUR IMAGE IS UPLOADED TO FIRE STORE");
+
+                // Set Alert Title
+                builder.setTitle("IMAGE UPLOADED");
+                builder.setCancelable(false);
+
+
+
+                builder
+                        .setNegativeButton(
+                                "VIEW IMAGE",
+                                new DialogInterface
+                                        .OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which)
+                                    {
+                                        Intent intent = new Intent(MainActivity.this,UloadView.class);
+                                        startActivity(intent);
+
+                                    }
+                                });
+
+                AlertDialog alertDialog = builder.create();
+
+
+                alertDialog.show();
+
+
+
+
+
+
+            }
+
     private void uploadImage() {
+
+        if (filePath==null){
+            Toast
+                .makeText(MainActivity.this,
+                        "Image Not Selected!!",
+                        Toast.LENGTH_SHORT)
+                .show();
+
+        }
         if (filePath != null) {
 
             // Code for showing progressDialog while uploading
@@ -198,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
                     .child(
                             "images/"
                                     + UUID.randomUUID().toString());
+
+
 
 
             ref.putFile(filePath)
@@ -215,7 +235,10 @@ public class MainActivity extends AppCompatActivity {
                                                     "Image Uploaded!!",
                                                     Toast.LENGTH_SHORT)
                                             .show();
+                                    dilogBox();
+
                                 }
+
                             })
 
                     .addOnFailureListener(new OnFailureListener() {
@@ -244,14 +267,21 @@ public class MainActivity extends AppCompatActivity {
                                             / taskSnapshot.getTotalByteCount()
 
 
+
+
                                     );
 
 
                                     progressDialog.setMessage(
                                             "Uploaded "
                                                     + (int) progress + "%");
+
+
                                 }
                             });
+
+
+
 
 
 
