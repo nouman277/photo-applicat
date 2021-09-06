@@ -6,22 +6,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class UloadView extends AppCompatActivity {
 
-RecyclerView mRecycleView;
-   private FirebaseStorage storage;
-  private   StorageReference storageReference;
-private ArrayList<model> modelArrayList;
-private  myAdapter adapter;
+    Intent intent = getIntent();
+    String URL = intent.getExtras().getString("URL");
+
+    ImageView imageView;
 
 
 
@@ -33,54 +35,12 @@ private  myAdapter adapter;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uload_view);
 
-
-            mRecycleView=findViewById(R.id.recycleViewEditText);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecycleView.setLayoutManager(layoutManager);
-        mRecycleView.setHasFixedSize(true);
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
+        imageView = findViewById(R.id.imageViewETMI);
 
 
 
-        modelArrayList =new ArrayList<>();
-
-        ClearALL();
-
-        GetDataFromFirebase();
-
+        Picasso.get().load(URL).into(imageView);
 
     }
 
-    private void GetDataFromFirebase() {
-
-        ProgressDialog progressDialog
-                = new ProgressDialog(this);
-        progressDialog.setTitle("Fetching...");
-        progressDialog.show();
-
-        StorageReference ref
-                = storageReference
-                .child("images/");
-
-        ref.getDownloadUrl().getResult();
-
-
-
-
-
-
-    }
-    private void ClearALL(){
-
-        if (modelArrayList!=null){
-
-            modelArrayList.clear();
-        }else {
-            modelArrayList = new ArrayList<>();
-        }
-
-
-        }
     }

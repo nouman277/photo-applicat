@@ -18,12 +18,16 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-         btnSELECT=findViewById(R.id.selectPhotoET);
-         btnUPLOAD=findViewById(R.id.uploadPhotoET);
-         viewP=findViewById(R.id.imageViewET);
+        btnSELECT=findViewById(R.id.selectPhotoET);
+        btnUPLOAD=findViewById(R.id.uploadPhotoET);
+        viewP=findViewById(R.id.imageViewET);
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -98,108 +103,111 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-            private void SelectImage () {
+    private void SelectImage () {
 
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
 
-                startActivityForResult(
-                        Intent.createChooser(
-                                intent,
-                                "Select Image from here..."),
-                        PICK_IMAGE_REQUEST);
-            }
-
-
-            @Override
-            protected void onActivityResult ( int requestCode,
-            int resultCode,
-            Intent data)
-            {
-
-                super.onActivityResult(requestCode,
-                        resultCode,
-                        data);
+        startActivityForResult(
+                Intent.createChooser(
+                        intent,
+                        "Select Image from here..."),
+                PICK_IMAGE_REQUEST);
+    }
 
 
-                if (requestCode == PICK_IMAGE_REQUEST
-                        && resultCode == RESULT_OK
-                        && data != null
-                        && data.getData() != null) {
+    @Override
+    protected void onActivityResult ( int requestCode,
+                                      int resultCode,
+                                      Intent data)
+    {
+
+        super.onActivityResult(requestCode,
+                resultCode,
+                data);
 
 
-                    filePath = data.getData();
-                    try {
+        if (requestCode == PICK_IMAGE_REQUEST
+                && resultCode == RESULT_OK
+                && data != null
+                && data.getData() != null) {
 
 
-                        Bitmap bitmap = MediaStore
-                                .Images
-                                .Media
-                                .getBitmap(
-                                        getContentResolver(),
-                                        filePath);
-                        viewP.setImageBitmap(bitmap);
-                    } catch (IOException e) {
-
-                        e.printStackTrace();
-
-                    }
 
 
-                }
+
+            filePath = data.getData();
+            try {
+
+
+                Bitmap bitmap = MediaStore
+                        .Images
+                        .Media
+                        .getBitmap(
+                                getContentResolver(),
+                                filePath);
+                viewP.setImageBitmap(bitmap);
+            } catch (IOException e) {
+
+                e.printStackTrace();
 
             }
 
-            private void dilogBox(){
-                AlertDialog.Builder builder
-                        = new AlertDialog
-                        .Builder(MainActivity.this);
 
-                builder.setMessage("YOUR IMAGE IS UPLOADED TO FIRE STORE");
+        }
 
-                // Set Alert Title
-                builder.setTitle("IMAGE UPLOADED");
-                builder.setCancelable(false);
+    }
 
+    private void dilogBox(){
+        AlertDialog.Builder builder
+                = new AlertDialog
+                .Builder(MainActivity.this);
 
+        builder.setMessage("YOUR IMAGE IS UPLOADED TO FIRE STORE");
 
-                builder
-                        .setNegativeButton(
-                                "VIEW IMAGE",
-                                new DialogInterface
-                                        .OnClickListener() {
-
-                                    @Override
-                                    public void onClick(DialogInterface dialog,
-                                                        int which)
-                                    {
-                                        Intent intent = new Intent(MainActivity.this,UloadView.class);
-                                        startActivity(intent);
-
-                                    }
-                                });
-
-                AlertDialog alertDialog = builder.create();
-
-
-                alertDialog.show();
+        // Set Alert Title
+        builder.setTitle("IMAGE UPLOADED");
+        builder.setCancelable(false);
 
 
 
+        builder
+                .setNegativeButton(
+                        "VIEW IMAGE",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which)
+                            {
+                                Intent intent = new Intent(MainActivity.this,UloadView.class);
+                                startActivity(intent);
+
+                            }
+                        });
+
+        AlertDialog alertDialog = builder.create();
+
+
+        alertDialog.show();
 
 
 
-            }
+
+
+
+    }
 
     private void uploadImage() {
 
         if (filePath==null){
             Toast
-                .makeText(MainActivity.this,
-                        "Image Not Selected!!",
-                        Toast.LENGTH_SHORT)
-                .show();
+                    .makeText(MainActivity.this,
+                            "Image Not Selected!!",
+                            Toast.LENGTH_SHORT)
+                    .show();
 
         }
         if (filePath != null) {
@@ -218,7 +226,24 @@ public class MainActivity extends AppCompatActivity {
                                     + UUID.randomUUID().toString());
 
 
+            ref.putFile(filePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if(task.isSuccessful()){
+                        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String URL = uri.toString();
 
+                                Intent i = new Intent(MainActivity.this,UloadView.class);
+                                i.putExtra("URL", URL);
+                                startActivity(i);
+                                //This is your image url do whatever you want with it.
+                            }
+                        });
+                    }
+                }
+            });
 
             ref.putFile(filePath)
                     .addOnSuccessListener(
@@ -261,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onProgress(
                                         UploadTask.TaskSnapshot taskSnapshot) {
-                                     double progress
+                                    double progress
                                             = (100.0
                                             * taskSnapshot.getBytesTransferred()
                                             / taskSnapshot.getTotalByteCount()
@@ -293,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        }
+}
 
 
 
