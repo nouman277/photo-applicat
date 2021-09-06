@@ -1,23 +1,86 @@
 package com.example.photoapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+
+import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
 
 public class UloadView extends AppCompatActivity {
 
-    ImageView mImage;
+RecyclerView mRecycleView;
+   private FirebaseStorage storage;
+  private   StorageReference storageReference;
+private ArrayList<model> modelArrayList;
+private  myAdapter adapter;
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uload_view);
 
-        mImage = findViewById(R.id.imageViewETU);
 
-        Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/photo-application-37386.appspot.com/o/images%2F6f249e0c-8093-469c-aacb-aac94d2ce59c?alt=media&token=b0f98aa2-4932-4350-b915-235c2c9c07e5").into(mImage);
+            mRecycleView=findViewById(R.id.recycleViewEditText);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecycleView.setLayoutManager(layoutManager);
+        mRecycleView.setHasFixedSize(true);
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
+
+
+        modelArrayList =new ArrayList<>();
+
+        ClearALL();
+
+        GetDataFromFirebase();
+
+
     }
-}
+
+    private void GetDataFromFirebase() {
+
+        ProgressDialog progressDialog
+                = new ProgressDialog(this);
+        progressDialog.setTitle("Fetching...");
+        progressDialog.show();
+
+        StorageReference ref
+                = storageReference
+                .child("images/");
+
+        ref.getDownloadUrl().getResult();
+
+
+
+
+
+
+    }
+    private void ClearALL(){
+
+        if (modelArrayList!=null){
+
+            modelArrayList.clear();
+        }else {
+            modelArrayList = new ArrayList<>();
+        }
+
+
+        }
+    }
