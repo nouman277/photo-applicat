@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView viewP;
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 22;
+    String URL;
 
 
     FirebaseStorage storage;
@@ -184,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                                                 int which)
                             {
                                 Intent intent = new Intent(MainActivity.this,UloadView.class);
+                                intent.putExtra("URL",URL);
                                 startActivity(intent);
 
                             }
@@ -234,11 +236,9 @@ public class MainActivity extends AppCompatActivity {
                         ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri){
-                                String URL = uri.toString();
+                                URL = uri.toString();
 
-                                Intent i = new Intent(MainActivity.this,UloadView.class);
-                              i.putExtra("URL",URL);
-                                startActivity(i);
+                              
                                 //This is your image url do whatever you want with it.
                             }
                         });
