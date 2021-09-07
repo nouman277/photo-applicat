@@ -33,6 +33,7 @@ import java.io.IOException;
 
 import java.util.UUID;
 
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -232,11 +233,11 @@ public class MainActivity extends AppCompatActivity {
                     if(task.isSuccessful()){
                         ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
-                            public void onSuccess(Uri uri) {
+                            public void onSuccess(Uri uri){
                                 String URL = uri.toString();
 
                                 Intent i = new Intent(MainActivity.this,UloadView.class);
-                                i.putExtra("URL", URL);
+                              i.putExtra("URL",URL);
                                 startActivity(i);
                                 //This is your image url do whatever you want with it.
                             }

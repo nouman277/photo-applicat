@@ -20,13 +20,10 @@ import java.util.ArrayList;
 
 public class UloadView extends AppCompatActivity {
 
-    Intent intent = getIntent();
-    String URL = intent.getExtras().getString("URL");
+
 
     ImageView imageView;
-
-
-
+     String strImage;
 
 
 
@@ -35,11 +32,21 @@ public class UloadView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uload_view);
 
-        imageView = findViewById(R.id.imageViewETMI);
+        ProgressDialog progressDialog
+                = new ProgressDialog(this);
+        progressDialog.setTitle("Fetching Datta....");
+        progressDialog.show();
+
+        Intent intent= getIntent();
+        imageView =  findViewById(R.id.imageViewETMI);
+        strImage= String.valueOf(intent.getStringExtra("URL"));
+
+ Picasso.get()
+           .load(strImage)
+          .into(imageView);
+        if (progressDialog.isShowing()) progressDialog.dismiss();
 
 
-
-        Picasso.get().load(URL).into(imageView);
 
     }
 
